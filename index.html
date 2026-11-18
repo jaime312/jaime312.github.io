@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#090614">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Gazapo — Sitio Oficial del Desarrollador (Jaime Trabajo)</title>
+<meta name="description" content="Sitio web oficial del desarrollador de Gazapo: el juego diario donde encuentras los errores que la IA no pudo esconder.">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:#08060f;color:#fff;min-height:100vh;overflow-x:hidden}
+  .bg{position:fixed;inset:0;overflow:hidden;z-index:0}
+  .blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55}
+  .b1{width:340px;height:340px;left:-90px;top:-70px;background:#7c3aed}
+  .b2{width:300px;height:300px;right:-80px;top:34%;background:#ec4899}
+  .b3{width:380px;height:260px;left:10%;bottom:-90px;background:#0ea5e9;opacity:.35}
+  .wrap{position:relative;z-index:1;max-width:600px;margin:0 auto;
+    padding:48px 22px 40px}
+  .eyebrow{display:inline-block;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+    color:#c4b5fd;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.4);
+    padding:6px 14px;border-radius:99px;margin-bottom:20px}
+  h1{font-size:clamp(32px,7vw,46px);font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:16px}
+  h1 .hl{background:linear-gradient(90deg,#c4b5fd,#f472b6);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{font-size:16px;line-height:1.6;color:#dbe2ff;margin-bottom:28px}
+  .card{background:rgba(21,17,42,.85);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:20px;margin-bottom:24px}
+  .card h2{font-size:18px;margin-bottom:10px;color:#fde047}
+  .card p{font-size:14px;line-height:1.6;color:#cbd5e1;margin-bottom:12px}
+  .links{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+  .btn{display:block;text-align:center;font-size:15px;font-weight:700;color:#fff;text-decoration:none;
+    background:linear-gradient(135deg,#8b5cf6,#ec4899);border-radius:14px;padding:14px;transition:opacity .2s}
+  .btn:hover{opacity:.9}
+  .btn-subtle{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#c4b5fd}
+  footer{text-align:center;font-size:12px;color:#94a3b8;margin-top:40px;line-height:1.8}
+  footer a{color:#a78bfa;text-decoration:none}
+  footer a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="wrap">
+  <span class="eyebrow">Desarrollador Oficial · Jaime Trabajo</span>
+  <h1>Gazapo<br><span class="hl">Caza los errores de la IA</span></h1>
+  <p class="lede">Bienvenido al sitio web del desarrollador de <b>Gazapo</b>. Cada día, un vídeo generado por inteligencia artificial con un error escondido para que pongas a prueba tu agudeza visual.</p>
+
+  <div class="card">
+    <h2>Descarga la Aplicación</h2>
+    <p>Gazapo está disponible para dispositivos móviles en las principales tiendas de aplicaciones:</p>
+    <div class="links">
+      <a class="btn" href="https://apps.apple.com/app/gazapo/id6822689490" target="_blank" rel="noopener noreferrer">📱 Descargar en Apple App Store</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Soporte y Contacto</h2>
+    <p>Para dudas, sugerencias o asistencia técnica:</p>
+    <div class="links">
+      <a class="btn btn-subtle" href="mailto:privacy@gazapo.app">✉️ Contactar con Soporte (privacy@gazapo.app)</a>
+      <a class="btn btn-subtle" href="https://jaime312.github.io/gazapo-privacy/" target="_blank">🔒 Política de Privacidad</a>
+      <a class="btn btn-subtle" href="/app-ads.txt">📄 Archivo app-ads.txt</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Jaime Trabajo · Todos los derechos reservados.</p>
+    <p><a href="https://jaime312.github.io/gazapo-privacy/">Privacidad</a> · <a href="mailto:privacy@gazapo.app">Soporte</a> · <a href="/app-ads.txt">app-ads.txt</a></p>
+  </footer>
+</div>
+</body>
+</html>
