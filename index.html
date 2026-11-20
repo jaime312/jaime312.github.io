@@ -6,7 +6,19 @@
 <meta name="theme-color" content="#0b0f1a">
 <meta name="description" content="Gazapo: encuentra el error escondido de la IA en el vídeo de hoy. Juega gratis en el navegador.">
 <title>Gazapo · ¿Ves el fallo de la IA?</title>
-<link rel="icon" href="data:,">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jaime312.github.io/">
+<meta property="og:title" content="Gazapo — Spot the AI Glitch">
+<meta property="og:description" content="1 daily video, 1 hidden AI glitch. Can you spot it before everyone else?">
+<meta property="og:image" content="https://jaime312.github.io/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Gazapo — Spot the AI Glitch">
+<meta name="twitter:description" content="1 daily video, 1 hidden AI glitch. Can you spot it before everyone else?">
+<meta name="twitter:image" content="https://jaime312.github.io/og-image.png">
 <link rel="preconnect" href="https://gazapo-media-gateway.jaime-v92.workers.dev" crossorigin>
 <style>
   *{box-sizing:border-box}
@@ -336,6 +348,21 @@
 
   paintLives();
   load();
+})();
+</script>
+<script>
+/* Enlace inteligente a tiendas: móvil -> solo su tienda; escritorio -> ambas. */
+(function(){
+  try{
+    var ua = navigator.userAgent || "";
+    var ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    var android = /Android/i.test(ua);
+    var app = document.getElementById("btnAppStore");
+    var play = document.getElementById("btnPlayStore");
+    if(ios && app && play){ play.style.display = "none"; app.style.display = "flex"; }
+    else if(android && app && play){ app.style.display = "none"; play.style.display = "flex"; }
+    else if(app && play){ app.style.display = "flex"; play.style.display = "flex"; }
+  }catch(e){}
 })();
 </script>
 </body>
