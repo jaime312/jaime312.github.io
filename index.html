@@ -4,68 +4,923 @@
 <meta charset="UTF-8">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#090614">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Gazapo — Sitio Oficial del Desarrollador (Jaime Trabajo)</title>
-<meta name="description" content="Sitio web oficial del desarrollador de Gazapo: el juego diario donde encuentras los errores que la IA no pudo esconder.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Gazapo — ¿Encuentras el error de la IA? 👁️ Reto Diario</title>
+<meta name="description" content="Juega gratis al reto diario de Gazapo en tu navegador. Encuentra el fallo de inteligencia artificial escondido en el vídeo en 15 segundos sin descargas ni registro.">
+
+<!-- Open Graph & Twitter Meta -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Gazapo — ¿Encuentras el fallo de la IA? 👁️ Reto Diario">
+<meta property="og:description" content="¿Lo ves antes que tus amigos? Juega gratis en 15 segundos sin descargas ni registro.">
+<meta property="og:url" content="https://jaime312.github.io/">
+<meta property="og:image" content="https://gazapo-media-gateway.jaime-v92.workers.dev/sombrilla-portada.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Gazapo — ¿Encuentras el fallo de la IA? 👁️ Reto Diario">
+<meta name="twitter:description" content="Pillado al primer intento. ¿Lo ves antes que yo? Juega gratis en el navegador.">
+
+<link rel="preconnect" href="https://gazapo-media-gateway.jaime-v92.workers.dev" crossorigin>
+
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    background:#08060f;color:#fff;min-height:100vh;overflow-x:hidden}
-  .bg{position:fixed;inset:0;overflow:hidden;z-index:0}
-  .blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55}
-  .b1{width:340px;height:340px;left:-90px;top:-70px;background:#7c3aed}
-  .b2{width:300px;height:300px;right:-80px;top:34%;background:#ec4899}
-  .b3{width:380px;height:260px;left:10%;bottom:-90px;background:#0ea5e9;opacity:.35}
-  .wrap{position:relative;z-index:1;max-width:600px;margin:0 auto;
-    padding:48px 22px 40px}
-  .eyebrow{display:inline-block;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
-    color:#c4b5fd;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.4);
-    padding:6px 14px;border-radius:99px;margin-bottom:20px}
-  h1{font-size:clamp(32px,7vw,46px);font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:16px}
-  h1 .hl{background:linear-gradient(90deg,#c4b5fd,#f472b6);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .lede{font-size:16px;line-height:1.6;color:#dbe2ff;margin-bottom:28px}
-  .card{background:rgba(21,17,42,.85);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:20px;margin-bottom:24px}
-  .card h2{font-size:18px;margin-bottom:10px;color:#fde047}
-  .card p{font-size:14px;line-height:1.6;color:#cbd5e1;margin-bottom:12px}
-  .links{display:flex;flex-direction:column;gap:10px;margin-top:14px}
-  .btn{display:block;text-align:center;font-size:15px;font-weight:700;color:#fff;text-decoration:none;
-    background:linear-gradient(135deg,#8b5cf6,#ec4899);border-radius:14px;padding:14px;transition:opacity .2s}
-  .btn:hover{opacity:.9}
-  .btn-subtle{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#c4b5fd}
-  footer{text-align:center;font-size:12px;color:#94a3b8;margin-top:40px;line-height:1.8}
-  footer a{color:#a78bfa;text-decoration:none}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:#080612;color:#fff;min-height:100vh;display:flex;flex-direction:column;
+    align-items:center;overflow-x:hidden;touch-action:manipulation;
+  }
+  .bg-glow{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+  .blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.45}
+  .b1{width:360px;height:360px;left:-100px;top:-80px;background:#7c3aed}
+  .b2{width:320px;height:320px;right:-80px;top:30%;background:#ec4899}
+  .b3{width:380px;height:300px;left:10%;bottom:-100px;background:#06b6d4;opacity:.3}
+
+  .app-wrap{
+    position:relative;z-index:1;width:100%;max-width:460px;min-height:100vh;
+    display:flex;flex-direction:column;padding:12px 14px 32px;
+  }
+
+  /* TOP BAR */
+  .top-bar{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:8px 6px 12px;margin-bottom:4px;
+  }
+  .brand-group{display:flex;align-items:center;gap:10px}
+  .brand-logo{
+    width:36px;height:36px;border-radius:10px;
+    background:linear-gradient(135deg,#8b5cf6,#ec4899);
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;box-shadow:0 4px 14px rgba(139,92,246,.45);
+  }
+  .brand-text h1{
+    font-size:19px;font-weight:900;letter-spacing:-0.5px;line-height:1.1;
+    background:linear-gradient(90deg,#fff,#f3e8ff);-webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .brand-text .badge{
+    display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:1px;
+    text-transform:uppercase;color:#34d399;background:rgba(52,211,153,.14);
+    border:1px solid rgba(52,211,153,.35);padding:2px 6px;border-radius:6px;margin-top:2px;
+  }
+
+  /* STATS BAR */
+  .stats-bar{
+    display:flex;align-items:center;gap:10px;
+    background:rgba(23,17,44,.75);border:1px solid rgba(139,92,246,.25);
+    border-radius:14px;padding:6px 12px;
+  }
+  .lives-wrap{display:flex;gap:3px;font-size:15px}
+  .timer-box{
+    font-size:13.5px;font-weight:800;font-variant-numeric:tabular-nums;
+    color:#fde047;min-width:44px;text-align:right;
+  }
+
+  /* FRIEND CHALLENGE BANNER */
+  .duel-banner{
+    display:none;background:linear-gradient(90deg,rgba(139,92,246,.25),rgba(236,72,153,.25));
+    border:1px solid rgba(236,72,153,.45);border-radius:12px;padding:8px 12px;
+    font-size:12px;line-height:1.4;margin-bottom:10px;color:#fdf4ff;text-align:center;
+  }
+  .duel-banner.show{display:block}
+
+  /* VIDEO GAME VIEWPORT */
+  .game-container{
+    position:relative;width:100%;aspect-ratio:9/16;max-height:68vh;
+    background:#000;border-radius:22px;overflow:hidden;
+    border:1.5px solid rgba(167,139,250,.35);
+    box-shadow:0 12px 40px rgba(0,0,0,.7), 0 0 24px rgba(139,92,246,.2);
+    display:flex;align-items:center;justify-content:center;
+    user-select:none;margin-bottom:12px;
+  }
+  video{
+    width:100%;height:100%;object-fit:contain;background:#000;
+    pointer-events:auto;cursor:crosshair;
+  }
+
+  /* PLAY OVERLAY */
+  .play-overlay{
+    position:absolute;inset:0;background:rgba(8,6,18,.82);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:24px;text-align:center;z-index:10;transition:opacity .25s ease;
+  }
+  .play-overlay.hidden{opacity:0;pointer-events:none}
+  .play-btn-circle{
+    width:76px;height:76px;border-radius:50%;
+    background:linear-gradient(135deg,#8b5cf6,#ec4899);
+    display:flex;align-items:center;justify-content:center;
+    font-size:32px;color:#fff;box-shadow:0 8px 30px rgba(236,72,153,.5);
+    margin-bottom:16px;cursor:pointer;animation:pulse 2s infinite;border:none;
+  }
+  @keyframes pulse{
+    0%{transform:scale(1);box-shadow:0 8px 30px rgba(236,72,153,.5)}
+    50%{transform:scale(1.08);box-shadow:0 12px 40px rgba(236,72,153,.8)}
+    100%{transform:scale(1);box-shadow:0 8px 30px rgba(236,72,153,.5)}
+  }
+  .play-title{font-size:18px;font-weight:900;margin-bottom:6px;color:#fff}
+  .play-sub{font-size:13px;color:#cbd5e1;line-height:1.5;max-width:280px}
+
+  /* IN-GAME TAP RIPPLES */
+  .tap-ripple{
+    position:absolute;width:48px;height:48px;margin-left:-24px;margin-top:-24px;
+    border-radius:50%;pointer-events:none;z-index:20;
+    animation:rippleAnim .6s cubic-bezier(.15,.85,.35,1.2) forwards;
+  }
+  .tap-ripple.hit{
+    border:3px solid #10b981;background:rgba(16,185,129,.35);
+    box-shadow:0 0 20px #10b981;
+  }
+  .tap-ripple.miss{
+    border:3px solid #ef4444;background:rgba(239,68,68,.3);
+    box-shadow:0 0 16px #ef4444;
+  }
+  @keyframes rippleAnim{
+    0%{transform:scale(.3);opacity:1}
+    100%{transform:scale(1.8);opacity:0}
+  }
+
+  /* GLITCH REVEAL SPOTLIGHT */
+  .glitch-spotlight{
+    position:absolute;border-radius:50%;border:3px dashed #fde047;
+    background:rgba(253,224,71,.25);pointer-events:none;z-index:15;
+    animation:spotlightPulse 1.2s infinite alternate;display:none;
+  }
+  @keyframes spotlightPulse{
+    0%{transform:scale(1);box-shadow:0 0 14px rgba(253,224,71,.5)}
+    100%{transform:scale(1.15);box-shadow:0 0 28px rgba(253,224,71,.9)}
+  }
+
+  /* BOTTOM STATUS STRIP */
+  .status-strip{
+    background:rgba(21,17,42,.8);border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;padding:10px 14px;font-size:13px;line-height:1.4;
+    color:#e2e8f0;display:flex;align-items:center;justify-content:center;
+    gap:8px;text-align:center;min-height:44px;margin-bottom:16px;
+  }
+
+  /* RESULT CARD MODAL */
+  .result-modal{
+    position:fixed;inset:0;background:rgba(5,3,14,.88);backdrop-filter:blur(10px);
+    z-index:100;display:flex;align-items:flex-end;justify-content:center;
+    opacity:0;pointer-events:none;transition:opacity .25s ease;padding:0;
+  }
+  .result-modal.show{opacity:1;pointer-events:auto}
+  .result-sheet{
+    width:100%;max-width:460px;background:linear-gradient(180deg,#1c133d,#0d0922);
+    border:1.5px solid rgba(139,92,246,.45);border-radius:28px 28px 0 0;
+    padding:24px 20px 36px;max-height:92vh;overflow-y:auto;box-shadow:0 -10px 40px rgba(0,0,0,.8);
+    transform:translateY(40px);transition:transform .3s cubic-bezier(.16,1,.3,1);
+  }
+  .result-modal.show .result-sheet{transform:translateY(0)}
+
+  .res-head{text-align:center;margin-bottom:14px}
+  .res-pill{
+    display:inline-block;font-size:11px;font-weight:800;letter-spacing:1.5px;
+    text-transform:uppercase;padding:4px 12px;border-radius:99px;margin-bottom:8px;
+  }
+  .res-pill.win{color:#34d399;background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3)}
+  .res-pill.lose{color:#f87171;background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.3)}
+  .res-title{font-size:24px;font-weight:900;letter-spacing:-0.5px;margin-bottom:4px}
+  .res-stars{font-size:26px;letter-spacing:4px;margin:6px 0}
+  .res-time{font-size:14px;color:#94a3b8}
+
+  /* EXPLANATION BOX */
+  .explain-box{
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+    border-radius:14px;padding:12px 14px;margin:14px 0;text-align:left;
+  }
+  .explain-tag{font-size:11px;font-weight:800;text-transform:uppercase;color:#c4b5fd;letter-spacing:1px}
+  .explain-text{font-size:13.5px;line-height:1.5;color:#f1f5f9;margin-top:4px}
+
+  /* ACTIONS & BUTTONS */
+  .btn-stack{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+  .btn{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;font-size:15px;font-weight:800;border-radius:14px;
+    padding:14px;border:none;cursor:pointer;text-decoration:none;
+    transition:transform .15s ease, opacity .15s ease;
+  }
+  .btn:active{transform:scale(.98)}
+  .btn-whatsapp{
+    background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;
+    box-shadow:0 6px 20px rgba(37,211,102,.35);
+  }
+  .btn-share-alt{
+    background:rgba(255,255,255,.08);color:#e2e8f0;
+    border:1px solid rgba(255,255,255,.15);
+  }
+
+  /* APP DOWNLOAD HERO (THE GOLDMINE) */
+  .app-download-card{
+    background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(236,72,153,.2));
+    border:1.5px solid rgba(167,139,250,.4);border-radius:18px;
+    padding:16px;margin-top:18px;text-align:center;
+  }
+  .app-download-card h3{
+    font-size:16px;font-weight:900;color:#fde047;margin-bottom:6px;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+  }
+  .app-download-card p{font-size:12.5px;line-height:1.5;color:#e2e8f0;margin-bottom:12px}
+  .store-badges{display:flex;gap:10px}
+  .btn-store{
+    flex:1;background:#fff;color:#090614;font-size:12px;font-weight:800;
+    border-radius:12px;padding:11px 8px;text-decoration:none;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    box-shadow:0 4px 14px rgba(0,0,0,.3);transition:opacity .15s ease;
+  }
+  .btn-store.google{background:#1e1b4b;color:#fff;border:1px solid rgba(255,255,255,.2)}
+  .btn-store:hover{opacity:.9}
+
+  /* TOAST NOTIFICATION */
+  .toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:#10b981;color:#fff;font-size:13px;font-weight:700;
+    padding:10px 20px;border-radius:99px;box-shadow:0 8px 24px rgba(0,0,0,.5);
+    opacity:0;pointer-events:none;transition:all .25s ease;z-index:200;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* DEVELOPER / APPLE / ADMOB FOOTER */
+  footer{
+    margin-top:auto;text-align:center;font-size:11.5px;color:#94a3b8;
+    padding:20px 8px 10px;line-height:1.8;border-top:1px solid rgba(255,255,255,.08);
+  }
+  footer a{color:#c4b5fd;text-decoration:none}
   footer a:hover{text-decoration:underline}
+
+  /* CONFETTI CANVAS */
+  #confettiCanvas{position:fixed;inset:0;pointer-events:none;z-index:90}
 </style>
 </head>
 <body>
-<div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
-<div class="wrap">
-  <span class="eyebrow">Desarrollador Oficial · Jaime Trabajo</span>
-  <h1>Gazapo<br><span class="hl">Caza los errores de la IA</span></h1>
-  <p class="lede">Bienvenido al sitio web del desarrollador de <b>Gazapo</b>. Cada día, un vídeo generado por inteligencia artificial con un error escondido para que pongas a prueba tu agudeza visual.</p>
 
-  <div class="card">
-    <h2>Descarga la Aplicación</h2>
-    <p>Gazapo está disponible para dispositivos móviles en las principales tiendas de aplicaciones:</p>
-    <div class="links">
-      <a class="btn" href="https://apps.apple.com/app/gazapo/id6822689490" target="_blank" rel="noopener noreferrer">📱 Descargar en Apple App Store</a>
+<canvas id="confettiCanvas"></canvas>
+<div class="bg-glow"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<div class="app-wrap">
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <div class="brand-group">
+      <div class="brand-logo">👀</div>
+      <div class="brand-text">
+        <h1>Gazapo</h1>
+        <span class="badge" id="lblEdition">Reto de Hoy</span>
+      </div>
+    </div>
+    <div class="stats-bar">
+      <div class="lives-wrap" id="livesWrap" title="Intentos restantes">
+        <span>❤️</span><span>❤️</span><span>❤️</span><span>❤️</span><span>❤️</span>
+      </div>
+      <div class="timer-box" id="timerBox">0,0s</div>
+    </div>
+  </header>
+
+  <!-- FRIEND DUEL BANNER (si viene con ref) -->
+  <div class="duel-banner" id="duelBanner">
+    ⚔️ <b>¡Te han retado!</b> Tu amigo cazó este gazapo al <span id="duelAttempts">1.º</span> intento en <span id="duelTime">2,4s</span>. ¿Eres capaz de verlo antes?
+  </div>
+
+  <!-- GAME CONTAINER (9:16) -->
+  <main class="game-container" id="gameContainer">
+    <video id="gameVideo" playsinline webkit-playsinline loop preload="auto"></video>
+    <div class="glitch-spotlight" id="glitchSpotlight"></div>
+
+    <!-- INITIAL PLAY OVERLAY -->
+    <div class="play-overlay" id="playOverlay">
+      <button class="play-btn-circle" id="btnStartGame" aria-label="Iniciar reto">▶</button>
+      <div class="play-title" id="playTitle">¿Dónde falló la IA?</div>
+      <div class="play-sub">Mira el vídeo con atención y toca la pantalla justo sobre el error. ¡Tienes 5 intentos!</div>
+    </div>
+  </main>
+
+  <!-- STATUS STRIP -->
+  <div class="status-strip" id="statusStrip">
+    <span>👀</span> <span id="statusText">Toca el botón ▶ para empezar el reto de hoy.</span>
+  </div>
+
+  <!-- APP STORE CALLOUT BANNER -->
+  <div class="app-download-card">
+    <h3>🔥 ¿Quieres guardar tu racha?</h3>
+    <p>En la app gratuita de <b>Gazapo</b> compites por las gemas del mes, guardas tu racha diaria y juegas todo el histórico.</p>
+    <div class="store-badges">
+      <a class="btn-store" href="https://apps.apple.com/app/gazapo/id6822689490" target="_blank" rel="noopener noreferrer">
+        🍏 App Store
+      </a>
+      <a class="btn-store google" href="https://play.google.com/store/apps/details?id=com.gazapo.game" target="_blank" rel="noopener noreferrer">
+        🤖 Google Play
+      </a>
     </div>
   </div>
 
-  <div class="card">
-    <h2>Soporte y Contacto</h2>
-    <p>Para dudas, sugerencias o asistencia técnica:</p>
-    <div class="links">
-      <a class="btn btn-subtle" href="mailto:privacy@gazapo.app">✉️ Contactar con Soporte (privacy@gazapo.app)</a>
-      <a class="btn btn-subtle" href="https://jaime312.github.io/gazapo-privacy/" target="_blank">🔒 Política de Privacidad</a>
-      <a class="btn btn-subtle" href="/app-ads.txt">📄 Archivo app-ads.txt</a>
-    </div>
-  </div>
-
+  <!-- COMPLIANCE / DEVELOPER FOOTER -->
   <footer>
-    <p>© 2026 Jaime Trabajo · Todos los derechos reservados.</p>
-    <p><a href="https://jaime312.github.io/gazapo-privacy/">Privacidad</a> · <a href="mailto:privacy@gazapo.app">Soporte</a> · <a href="/app-ads.txt">app-ads.txt</a></p>
+    <p><b>Gazapo</b> · Desarrollador Oficial: Jaime Trabajo</p>
+    <p>
+      <a href="https://jaime312.github.io/gazapo-privacy/" target="_blank">Privacidad</a> · 
+      <a href="mailto:privacy@gazapo.app">Soporte</a> · 
+      <a href="/app-ads.txt">app-ads.txt</a>
+    </p>
+    <p>© 2026 Gazapo. Todos los derechos reservados.</p>
   </footer>
 </div>
+
+<!-- RESULT MODAL -->
+<div class="result-modal" id="resultModal">
+  <div class="result-sheet">
+    <div class="res-head">
+      <div class="res-pill win" id="resPill">¡Pillado! 🎯</div>
+      <div class="res-title" id="resTitle">¡Gazapo Cazado!</div>
+      <div class="res-stars" id="resStars">⭐⭐⭐⭐⭐</div>
+      <div class="res-time" id="resTime">En 2,4s al 1.er intento</div>
+    </div>
+
+    <!-- EXPLANATION -->
+    <div class="explain-box">
+      <div class="explain-tag" id="explainTag">Error de la IA:</div>
+      <div class="explain-text" id="explainText">Cargando explicación del gazapo...</div>
+    </div>
+
+    <!-- VIRAL WORDLE ACTIONS -->
+    <div class="btn-stack">
+      <button class="btn btn-whatsapp" id="btnShareWhatsApp">
+        💬 Picar a un amigo por WhatsApp
+      </button>
+      <button class="btn btn-share-alt" id="btnCopyResult">
+        📋 Copiar resultado al portapapeles
+      </button>
+      <button class="btn btn-share-alt" id="btnReplay" style="display:none">
+        🔄 Intentar de nuevo
+      </button>
+    </div>
+
+    <!-- RETENTION HOOK: DOWNLOAD APP -->
+    <div class="app-download-card" style="margin-top:20px">
+      <h3>🏆 No pierdas tu racha</h3>
+      <p>Descarga la app gratuita para registrar tu victoria de hoy, desbloquear el archivo de vídeos y ganar la gema del mes.</p>
+      <div class="store-badges">
+        <a class="btn-store" href="https://apps.apple.com/app/gazapo/id6822689490" target="_blank" rel="noopener noreferrer">
+          🍏 Descargar para iPhone
+        </a>
+        <a class="btn-store google" href="https://play.google.com/store/apps/details?id=com.gazapo.game" target="_blank" rel="noopener noreferrer">
+          🤖 Descargar para Android
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toastMsg">✅ Copiado al portapapeles</div>
+
+<script>
+(function() {
+  'use strict';
+
+  const CF_GATEWAY = "https://gazapo-media-gateway.jaime-v92.workers.dev";
+  const GAZAPO_APP_KEY = "gazapo_app_6ccwbcjiql1l1isk6tngq6vn";
+  const CATALOG_URL = `${CF_GATEWAY}/catalogo.json?k=${encodeURIComponent(GAZAPO_APP_KEY)}`;
+
+  // Elementos DOM
+  const video = document.getElementById("gameVideo");
+  const gameContainer = document.getElementById("gameContainer");
+  const playOverlay = document.getElementById("playOverlay");
+  const btnStartGame = document.getElementById("btnStartGame");
+  const livesWrap = document.getElementById("livesWrap");
+  const timerBox = document.getElementById("timerBox");
+  const statusText = document.getElementById("statusText");
+  const resultModal = document.getElementById("resultModal");
+  const resPill = document.getElementById("resPill");
+  const resTitle = document.getElementById("resTitle");
+  const resStars = document.getElementById("resStars");
+  const resTime = document.getElementById("resTime");
+  const explainTag = document.getElementById("explainTag");
+  const explainText = document.getElementById("explainText");
+  const btnShareWhatsApp = document.getElementById("btnShareWhatsApp");
+  const btnCopyResult = document.getElementById("btnCopyResult");
+  const btnReplay = document.getElementById("btnReplay");
+  const duelBanner = document.getElementById("duelBanner");
+  const duelAttempts = document.getElementById("duelAttempts");
+  const duelTime = document.getElementById("duelTime");
+  const glitchSpotlight = document.getElementById("glitchSpotlight");
+  const toastMsg = document.getElementById("toastMsg");
+
+  // Estado del juego
+  let currentVideo = null;
+  let currentSidecar = null;
+  let attemptsLeft = 5;
+  let attemptsUsed = 0;
+  let isPlaying = false;
+  let isFinished = false;
+  let startTime = 0;
+  let timerInterval = null;
+  let finalElapsedSec = 0;
+  let attemptsHistory = []; // ['hit', 'miss', ...]
+  let duelData = null;
+
+  // Web Audio sintetizador nativo (0 dependencias)
+  let audioCtx = null;
+  function initAudio() {
+    if (!audioCtx) {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextClass) audioCtx = new AudioContextClass();
+    }
+    if (audioCtx && audioCtx.state === "suspended") {
+      audioCtx.resume().catch(function(){});
+    }
+  }
+
+  function playTone(freq, duration, type, startDelay) {
+    if (!audioCtx) return;
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type || "sine";
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime + (startDelay || 0));
+      gain.gain.setValueAtTime(0.2, audioCtx.currentTime + (startDelay || 0));
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (startDelay || 0) + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(audioCtx.currentTime + (startDelay || 0));
+      osc.stop(audioCtx.currentTime + (startDelay || 0) + duration);
+    } catch(e) {}
+  }
+
+  function soundVictory() {
+    initAudio();
+    // Arpegio alegre C5 -> E5 -> G5 -> C6
+    playTone(523.25, 0.15, "triangle", 0);
+    playTone(659.25, 0.15, "triangle", 0.08);
+    playTone(783.99, 0.18, "triangle", 0.16);
+    playTone(1046.50, 0.45, "triangle", 0.24);
+  }
+
+  function soundMiss() {
+    initAudio();
+    // Tono descendente error
+    playTone(220, 0.12, "sine", 0);
+    playTone(146.83, 0.20, "sine", 0.08);
+  }
+
+  function showToast(msg) {
+    toastMsg.textContent = msg;
+    toastMsg.classList.add("show");
+    setTimeout(function() { toastMsg.classList.remove("show"); }, 2600);
+  }
+
+  // Parsear URL parameters
+  function checkUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    const vId = params.get("v") || params.get("challenge") || params.get("id");
+    const refTime = params.get("ref_time") || params.get("t");
+    const refAtt = params.get("ref_att") || params.get("a");
+
+    if (refTime) {
+      const s = (parseFloat(refTime) > 50 ? (parseFloat(refTime)/1000).toFixed(1) : parseFloat(refTime).toFixed(1)) + "s";
+      const att = refAtt ? (refAtt + ".º") : "1.º";
+      duelAttempts.textContent = att;
+      duelTime.textContent = s;
+      duelBanner.classList.add("show");
+      duelData = { timeSec: parseFloat(s), attempts: refAtt || 1 };
+    }
+    return vId;
+  }
+
+  // Cargar catálogo de Cloudflare y seleccionar vídeo
+  async function loadVideoCatalog() {
+    const reqVidId = checkUrlParams();
+    let catalog = null;
+
+    try {
+      const res = await fetch(CATALOG_URL, { cache: "no-store" });
+      if (res.ok) catalog = await res.json();
+    } catch(e) {
+      console.warn("Fallo al cargar catálogo:", e);
+    }
+
+    const videos = (catalog && catalog.videos && catalog.videos.length) ? catalog.videos : [];
+    
+    // Fallback de emergencia si no hay red o catálogo
+    const fallbackVideo = {
+      id: "sombrilla",
+      titulo: "Sombrilla",
+      src: `${CF_GATEWAY}/sombrilla.mp4?k=${encodeURIComponent(GAZAPO_APP_KEY)}`,
+      meta_path: `${CF_GATEWAY}/sombrilla.json?k=${encodeURIComponent(GAZAPO_APP_KEY)}`,
+      poster: `${CF_GATEWAY}/sombrilla-portada.jpg?k=${encodeURIComponent(GAZAPO_APP_KEY)}`,
+      gazapoCorto: "Sombra sombrilla",
+      explicacion: "Hay una sombra proyectada en la arena pero no hay ninguna sombrilla real en el plano."
+    };
+
+    let targetVideo = null;
+    if (reqVidId) {
+      targetVideo = videos.find(function(v){ return v.id === reqVidId; });
+    }
+    if (!targetVideo) {
+      const today = new Date().toISOString().slice(0, 10);
+      targetVideo = videos.find(function(v){ return v.fecha === today; });
+    }
+    if (!targetVideo) {
+      targetVideo = videos.length ? videos[0] : fallbackVideo;
+    }
+
+    currentVideo = targetVideo;
+    setupVideoPlayer(currentVideo);
+    loadSidecar(currentVideo);
+  }
+
+  function setupVideoPlayer(v) {
+    document.getElementById("lblEdition").textContent = v.titulo || "Reto de Hoy";
+    document.getElementById("playTitle").textContent = "¿Dónde falló la IA?";
+    
+    let videoSrc = v.src;
+    if (!videoSrc.includes("k=")) {
+      videoSrc += (videoSrc.includes("?") ? "&" : "?") + "k=" + encodeURIComponent(GAZAPO_APP_KEY);
+    }
+    video.src = videoSrc;
+    if (v.poster) {
+      let posterSrc = v.poster;
+      if (!posterSrc.includes("k=")) {
+        posterSrc += (posterSrc.includes("?") ? "&" : "?") + "k=" + encodeURIComponent(GAZAPO_APP_KEY);
+      }
+      video.poster = posterSrc;
+    }
+  }
+
+  async function loadSidecar(v) {
+    if (!v.meta_path) return;
+    let metaUrl = v.meta_path;
+    if (!metaUrl.includes("k=")) {
+      metaUrl += (metaUrl.includes("?") ? "&" : "?") + "k=" + encodeURIComponent(GAZAPO_APP_KEY);
+    }
+    try {
+      const res = await fetch(metaUrl);
+      if (res.ok) {
+        currentSidecar = await res.json();
+      }
+    } catch(e) {
+      console.warn("Fallo cargando sidecar:", e);
+    }
+  }
+
+  // Inicio de partida
+  function startGame() {
+    initAudio();
+    playOverlay.classList.add("hidden");
+    isPlaying = true;
+    isFinished = false;
+    attemptsLeft = 5;
+    attemptsUsed = 0;
+    attemptsHistory = [];
+    updateHearts();
+
+    video.currentTime = 0;
+    video.play().catch(function(e){ console.warn("Play error:", e); });
+
+    startTime = performance.now();
+    statusText.textContent = "Mira con atención: toca la pantalla justo sobre el error.";
+
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(function() {
+      if (!isPlaying || isFinished) return;
+      const elapsed = (performance.now() - startTime) / 1000;
+      timerBox.textContent = elapsed.toFixed(1).replace(".", ",") + "s";
+    }, 100);
+  }
+
+  function updateHearts() {
+    let str = "";
+    for (let i = 0; i < 5; i++) {
+      str += (i < attemptsLeft) ? "❤️" : "🖤";
+    }
+    livesWrap.innerHTML = str;
+  }
+
+  // Geometría y cálculo de coordenadas normalizadas en vídeo
+  function getNormalizedCoords(event) {
+    const rect = video.getBoundingClientRect();
+    const clientX = (event.clientX != null) ? event.clientX : (event.touches && event.touches[0] ? event.touches[0].clientX : 0);
+    const clientY = (event.clientY != null) ? event.clientY : (event.touches && event.touches[0] ? event.touches[0].clientY : 0);
+
+    const clickX = clientX - rect.left;
+    const clickY = clientY - rect.top;
+
+    const vw = video.videoWidth || rect.width;
+    const vh = video.videoHeight || rect.height;
+    const videoRatio = vw / vh;
+    const containerRatio = rect.width / rect.height;
+
+    let renderedW, renderedH, offsetX, offsetY;
+    if (containerRatio > videoRatio) {
+      renderedH = rect.height;
+      renderedW = rect.height * videoRatio;
+      offsetX = (rect.width - renderedW) / 2;
+      offsetY = 0;
+    } else {
+      renderedW = rect.width;
+      renderedH = rect.width / videoRatio;
+      offsetX = 0;
+      offsetY = (rect.height - renderedH) / 2;
+    }
+
+    const relX = clickX - offsetX;
+    const relY = clickY - offsetY;
+
+    if (relX < 0 || relX > renderedW || relY < 0 || relY > renderedH) {
+      return null;
+    }
+
+    return {
+      nx: Math.max(0, Math.min(1, relX / renderedW)),
+      ny: Math.max(0, Math.min(1, relY / renderedH)),
+      screenX: clickX,
+      screenY: clickY,
+      renderedW: renderedW,
+      renderedH: renderedH,
+      offsetX: offsetX,
+      offsetY: offsetY
+    };
+  }
+
+  // Validación de acierto (inPoly + distToPoly + time tolerance)
+  function inPoly(px, py, pts) {
+    let inside = false;
+    for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+      const xi = pts[i][0], yi = pts[i][1], xj = pts[j][0], yj = pts[j][1];
+      if (((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / (yj - yi) + xi)) inside = !inside;
+    }
+    return inside;
+  }
+
+  function distToSeg(px, py, ax, ay, bx, by) {
+    const dx = bx - ax, dy = by - ay, L = dx * dx + dy * dy;
+    let t = L ? ((px - ax) * dx + (py - ay) * dy) / L : 0;
+    t = Math.max(0, Math.min(1, t));
+    return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+  }
+
+  function distToPoly(px, py, pts) {
+    let m = 1e9;
+    for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+      m = Math.min(m, distToSeg(px, py, pts[j][0], pts[j][1], pts[i][0], pts[i][1]));
+    }
+    return m;
+  }
+
+  function evaluateTap(coords, t) {
+    const z = (currentSidecar && currentSidecar.zona) ? currentSidecar.zona : (currentVideo && currentVideo.zona);
+    const gr = (currentSidecar && currentSidecar.glitch_region) || (currentVideo && currentVideo.glitch_region);
+
+    // 1. Región circular fija
+    if (gr && typeof gr.x === "number" && typeof gr.y === "number") {
+      const r = gr.radius || 0.08;
+      const d = Math.hypot(coords.nx - gr.x, coords.ny - gr.y);
+      if (d <= r + 0.04) return { isHit: true, center: [gr.x, gr.y] };
+    }
+
+    // 2. Polígonos de fotogramas
+    if (z && z.type === "frames" && z.map) {
+      const fps = z.fps || 30;
+      const curFrame = Math.round(t * fps);
+      const span = Math.max(1, Math.ceil(0.40 * fps)); // ±0.40s ventana humana
+
+      for (let df = -span; df <= span; df++) {
+        const f = curFrame + df;
+        const poly = z.map[f];
+        if (poly && poly.length >= 3) {
+          if (inPoly(coords.nx, coords.ny, poly)) return { isHit: true, poly: poly };
+          if (distToPoly(coords.nx, coords.ny, poly) <= 0.07) return { isHit: true, poly: poly };
+        }
+      }
+    }
+
+    // 3. Fallback polígono genérico
+    if (z && z.pts && z.pts.length >= 3) {
+      if (inPoly(coords.nx, coords.ny, z.pts) || distToPoly(coords.nx, coords.ny, z.pts) <= 0.07) {
+        return { isHit: true, poly: z.pts };
+      }
+    }
+
+    return { isHit: false };
+  }
+
+  // Interacción táctil en el vídeo
+  function handleGameTap(e) {
+    if (!isPlaying || isFinished) return;
+    e.preventDefault();
+
+    const coords = getNormalizedCoords(e);
+    if (!coords) return;
+
+    attemptsUsed++;
+    const t = video.currentTime;
+    const evalRes = evaluateTap(coords, t);
+
+    // Renderizar animación de toque (ripple)
+    renderRipple(coords.screenX, coords.screenY, evalRes.isHit);
+
+    if (evalRes.isHit) {
+      // 🎉 ¡VICTORIA!
+      attemptsHistory.push('hit');
+      handleWin(coords, evalRes);
+    } else {
+      // ❌ Fallo
+      attemptsHistory.push('miss');
+      attemptsLeft--;
+      updateHearts();
+      soundMiss();
+
+      if (attemptsLeft <= 0) {
+        handleLoss();
+      } else {
+        statusText.innerHTML = `❌ <b>¡Ahí no estaba!</b> Te quedan ${attemptsLeft} intentos.`;
+      }
+    }
+  }
+
+  function renderRipple(x, y, isHit) {
+    const rip = document.createElement("div");
+    rip.className = "tap-ripple " + (isHit ? "hit" : "miss");
+    rip.style.left = x + "px";
+    rip.style.top = y + "px";
+    gameContainer.appendChild(rip);
+    setTimeout(function() { if (rip.parentNode) rip.parentNode.removeChild(rip); }, 650);
+  }
+
+  function handleWin(coords, evalRes) {
+    isFinished = true;
+    isPlaying = false;
+    clearInterval(timerInterval);
+    finalElapsedSec = ((performance.now() - startTime) / 1000).toFixed(1);
+    video.pause();
+    soundVictory();
+    triggerConfetti();
+
+    statusText.innerHTML = `🎯 <b>¡CAZADO AL ${attemptsUsed}.º INTENTO!</b> en ${finalElapsedSec}s`;
+
+    // Resaltar gazapo
+    highlightGlitch(coords, evalRes);
+
+    setTimeout(function() {
+      showResultModal(true);
+    }, 1200);
+  }
+
+  function handleLoss() {
+    isFinished = true;
+    isPlaying = false;
+    clearInterval(timerInterval);
+    finalElapsedSec = ((performance.now() - startTime) / 1000).toFixed(1);
+    video.pause();
+
+    statusText.innerHTML = `💀 <b>¡Se escapó el gazapo!</b> Has agotado los 5 intentos.`;
+
+    setTimeout(function() {
+      showResultModal(false);
+    }, 900);
+  }
+
+  function highlightGlitch(coords, evalRes) {
+    const rx = coords.offsetX + coords.nx * coords.renderedW;
+    const ry = coords.offsetY + coords.ny * coords.renderedH;
+    glitchSpotlight.style.width = "70px";
+    glitchSpotlight.style.height = "70px";
+    glitchSpotlight.style.left = (rx - 35) + "px";
+    glitchSpotlight.style.top = (ry - 35) + "px";
+    glitchSpotlight.style.display = "block";
+  }
+
+  // Generación de estrellas y texto compartible Wordle
+  function showResultModal(isWin) {
+    const expl = (currentSidecar && (currentSidecar.explicacion || currentSidecar.gazapoCorto)) ||
+                 (currentVideo && (currentVideo.explicacion || currentVideo.gazapoCorto)) ||
+                 "Un error en los reflejos y la geometría generada por IA.";
+
+    explainTag.textContent = (currentVideo && currentVideo.gazapoCorto) ? `Gazapo: ${currentVideo.gazapoCorto}` : "Error de la IA:";
+    explainText.textContent = expl;
+
+    const starsNum = isWin ? Math.max(1, 6 - attemptsUsed) : 0;
+    let starsStr = "";
+    for (let i = 1; i <= 5; i++) starsStr += (i <= starsNum) ? "⭐" : "⬛";
+    resStars.textContent = starsStr;
+
+    if (isWin) {
+      resPill.className = "res-pill win";
+      resPill.textContent = "¡Gazapo Cazado! 🎯";
+      resTitle.textContent = `¡Pillado en ${finalElapsedSec}s!`;
+      resTime.textContent = `Al ${attemptsUsed}.º intento (${starsNum}/5 ⭐)`;
+      btnReplay.style.display = "none";
+    } else {
+      resPill.className = "res-pill lose";
+      resPill.textContent = "Se escapó 💀";
+      resTitle.textContent = "¡Fin de la partida!";
+      resTime.textContent = "0/5 ⭐ · 5 intentos agotados";
+      btnReplay.style.display = "block";
+    }
+
+    // Configurar texto de pique para WhatsApp / Compartir
+    const vId = (currentVideo && currentVideo.id) || "hoy";
+    const ord = attemptsUsed === 1 ? "1.º" : (attemptsUsed + ".º");
+    const playUrl = `https://jaime312.github.io/?v=${encodeURIComponent(vId)}&ref_time=${Math.round(parseFloat(finalElapsedSec)*1000)}&ref_att=${attemptsUsed}`;
+
+    let viralText = "";
+    if (isWin) {
+      viralText = `👀 Pillado al ${ord} intento en ${finalElapsedSec}s — ¿lo ves antes que yo?\n👉 Juega gratis en 15s (sin instalar nada): ${playUrl}`;
+    } else {
+      viralText = `💀 ¡Se me ha escapado el gazapo de hoy! ¿Eres capaz de encontrar el error de la IA?\n👉 Pruébalo gratis aquí: ${playUrl}`;
+    }
+
+    btnShareWhatsApp.onclick = function() {
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(viralText)}`;
+      if (navigator.share) {
+        navigator.share({
+          title: "Gazapo — Reto Diario",
+          text: viralText,
+          url: playUrl
+        }).catch(function() {
+          window.open(waUrl, "_blank");
+        });
+      } else {
+        window.open(waUrl, "_blank");
+      }
+    };
+
+    btnCopyResult.onclick = function() {
+      let emojiRow = "";
+      for (let i = 0; i < 5; i++) {
+        if (i < attemptsHistory.length) {
+          emojiRow += (attemptsHistory[i] === 'hit') ? "🎯 " : "❌ ";
+        } else {
+          emojiRow += "⬜ ";
+        }
+      }
+      const fullCopy = `Gazapo Reto Diario\n${isWin ? '🎯 Pillado' : '💀 Se escapó'} en ${finalElapsedSec}s (${starsNum}/5 ⭐)\n${emojiRow.trim()}\n👉 Juega en: https://jaime312.github.io/`;
+      
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(fullCopy).then(function() {
+          showToast("✅ ¡Resultado copiado para compartir!");
+        }).catch(function() {
+          showToast("Copia este enlace: " + playUrl);
+        });
+      } else {
+        showToast("Copia este enlace: " + playUrl);
+      }
+    };
+
+    resultModal.classList.add("show");
+  }
+
+  btnReplay.onclick = function() {
+    resultModal.classList.remove("show");
+    glitchSpotlight.style.display = "none";
+    startGame();
+  };
+
+  btnStartGame.onclick = startGame;
+  video.addEventListener("pointerdown", handleGameTap);
+
+  // Confetti Canvas ligero
+  function triggerConfetti() {
+    const cvs = document.getElementById("confettiCanvas");
+    if (!cvs) return;
+    const ctx = cvs.getContext("2d");
+    cvs.width = window.innerWidth;
+    cvs.height = window.innerHeight;
+
+    const colors = ["#8b5cf6", "#ec4899", "#34d399", "#fde047", "#38bdf8"];
+    const pieces = [];
+    for (let i = 0; i < 60; i++) {
+      pieces.push({
+        x: cvs.width * 0.5,
+        y: cvs.height * 0.4,
+        vx: (Math.random() - 0.5) * 12,
+        vy: (Math.random() - 0.8) * 14,
+        size: Math.random() * 8 + 5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rotation: Math.random() * 360,
+        rotSpeed: (Math.random() - 0.5) * 10
+      });
+    }
+
+    let frame = 0;
+    function anim() {
+      ctx.clearRect(0, 0, cvs.width, cvs.height);
+      pieces.forEach(function(p) {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.35; // Gravedad
+        p.rotation += p.rotSpeed;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation * Math.PI / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+        ctx.restore();
+      });
+      frame++;
+      if (frame < 90) requestAnimationFrame(anim);
+      else ctx.clearRect(0, 0, cvs.width, cvs.height);
+    }
+    requestAnimationFrame(anim);
+  }
+
+  // Carga inicial
+  loadVideoCatalog();
+})();
+</script>
+
 </body>
 </html>
