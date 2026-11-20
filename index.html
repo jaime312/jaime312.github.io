@@ -270,8 +270,10 @@
     if (timerId){ clearInterval(timerId); timerId = null; }
     resTitle.textContent = win ? tr("win") : tr("lose");
     var sec = ((Date.now()-startedAt)/1000).toFixed(1).replace(".", LANG==="es"?",":".");
+    var triesWord = tr("tries");
+    if (LANG === "es" && used === 1) triesWord = " intento";
     resMeta.textContent = win
-      ? tr("hits") + used + tr("tries") + tr("inTime") + sec + "s"
+      ? tr("hits") + used + triesWord + tr("inTime") + sec + "s"
       : tr("failText");
     resExplain.textContent = (zone && zone.explain) ? "👀 " + zone.explain : "";
     result.hidden = false;
