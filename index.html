@@ -4,10 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b0f1a">
-<meta name="description" content="Gazapo: encuentra el error escondido de la IA en el vídeo de hoy. Juega gratis en el navegador.">
+<meta name="description" content="Gazapo: encuentra el error escondido de la IA en el vídeo de hoy. Juega gratis en el navegador o instálalo como App PWA.">
 <title>Gazapo · ¿Ves el fallo de la IA?</title>
+
+<!-- PWA Manifest & App Meta -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Gazapo">
 <link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="favicon.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<!-- OpenGraph & Social Cards -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://jaime312.github.io/">
 <meta property="og:title" content="Gazapo — Spot the AI Glitch">
@@ -19,60 +28,350 @@
 <meta name="twitter:title" content="Gazapo — Spot the AI Glitch">
 <meta name="twitter:description" content="1 daily video, 1 hidden AI glitch. Can you spot it before everyone else?">
 <meta name="twitter:image" content="https://jaime312.github.io/og-image.png">
+
 <link rel="preconnect" href="https://gazapo-media-gateway.jaime-v92.workers.dev" crossorigin>
 <style>
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden}
-  body{background:#0b0f1a;color:#f7f8fc;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-  #app{width:100%;max-width:480px;margin:0 auto;padding:14px 12px calc(20px + env(safe-area-inset-bottom))}
-  header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
-  .brand{font-size:20px;font-weight:900;letter-spacing:.5px}
+  body{
+    background:#0b0f1a;
+    color:#f7f8fc;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  :focus-visible{
+    outline:2px solid #8b5cf6;
+    outline-offset:2px;
+  }
+  #app{
+    width:100%;
+    max-width:520px;
+    margin:0 auto;
+    padding:12px 14px calc(24px + env(safe-area-inset-bottom));
+    flex:1;
+    display:flex;
+    flex-direction:column;
+  }
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:10px;
+  }
+  .brand-group{display:flex;align-items:center;gap:8px}
+  .brand{font-size:20px;font-weight:900;letter-spacing:.5px;text-decoration:none;color:#f7f8fc}
   .brand span{color:#f59e0b}
-  .pill{font-size:11px;font-weight:700;padding:6px 10px;border-radius:999px;background:#1b2236;color:#c9d3ee;border:1px solid #2b3552;white-space:nowrap}
+  .header-actions{display:flex;align-items:center;gap:6px}
+  .pill{
+    font-size:11px;
+    font-weight:700;
+    padding:5px 9px;
+    border-radius:999px;
+    background:#1b2236;
+    color:#c9d3ee;
+    border:1px solid #2b3552;
+    white-space:nowrap;
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+  }
+  .btn-lang{
+    font-size:11px;
+    font-weight:800;
+    padding:4px 8px;
+    border-radius:8px;
+    background:#252f4b;
+    color:#cbd5e1;
+    border:1px solid #3b476e;
+    cursor:pointer;
+  }
+  .btn-lang:hover{background:#323e61;color:#fff}
+
+  /* PWA Smart Install Banner */
+  #pwaBanner{
+    display:none;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    background:linear-gradient(135deg,#1e1b4b,#2e1065);
+    border:1px solid #7c3aed;
+    border-radius:14px;
+    padding:10px 14px;
+    margin-bottom:12px;
+    box-shadow:0 4px 16px rgba(124,58,237,.25);
+    animation:fadeIn .3s ease-out;
+  }
+  #pwaBanner.show{display:flex}
+  .pwa-text{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:#e0e7ff}
+  .pwa-icon{width:32px;height:32px;border-radius:8px;flex-shrink:0}
+  .pwa-actions{display:flex;align-items:center;gap:6px}
+  .btn-pwa-install{
+    background:#8b5cf6;
+    color:#fff;
+    border:none;
+    padding:6px 12px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:800;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .btn-pwa-dismiss{
+    background:transparent;
+    color:#94a3b8;
+    border:none;
+    padding:6px 8px;
+    font-size:16px;
+    cursor:pointer;
+    line-height:1;
+  }
+
+  /* Game Stage & Video */
   #stage{width:100%}
-  #videoWrap{position:relative;width:100%;aspect-ratio:9/16;max-height:66vh;background:#000;border-radius:16px;overflow:hidden;border:1px solid #222d47}
-  #gameVideo{width:100%;height:100%;object-fit:contain;display:block;background:#000}
+  #videoWrap{
+    position:relative;
+    width:100%;
+    aspect-ratio:9/16;
+    max-height:64vh;
+    background:#000;
+    border-radius:18px;
+    overflow:hidden;
+    border:1px solid #222d47;
+    touch-action:manipulation;
+    cursor:crosshair;
+  }
+  #gameVideo{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+    background:#000;
+  }
   #marks{position:absolute;inset:0;pointer-events:none}
-  .mark{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;border:3px solid #ff4d4d;box-shadow:0 0 0 2px rgba(0,0,0,.5);background:rgba(255,77,77,.12)}
-  .mark.hit{border-color:#34d399;background:rgba(52,211,153,.18)}
-  #loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:#9fb0d8;background:#0b0f1a}
-  #loading.hidden,#videoWrap.hidden{display:none}
-  .controls{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}
+  .mark{
+    position:absolute;
+    width:32px;
+    height:32px;
+    margin:-16px 0 0 -16px;
+    border-radius:50%;
+    border:3px solid #ff4d4d;
+    box-shadow:0 0 0 2px rgba(0,0,0,.6);
+    background:rgba(255,77,77,.2);
+    pointer-events:none;
+    animation:popIn .2s ease-out;
+  }
+  .mark.hit{
+    border-color:#34d399;
+    background:rgba(52,211,153,.25);
+    box-shadow:0 0 12px rgba(52,211,153,.6);
+  }
+  @keyframes popIn{
+    from{transform:scale(.4);opacity:0}
+    to{transform:scale(1);opacity:1}
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(-6px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  #btnAudio{
+    position:absolute;
+    top:12px;
+    right:12px;
+    z-index:4;
+    background:rgba(15,23,42,.75);
+    backdrop-filter:blur(4px);
+    border:1px solid rgba(255,255,255,.2);
+    color:#fff;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    font-size:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:background .2s;
+  }
+  #btnAudio:hover{background:rgba(30,41,59,.9)}
+
+  #loading{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    font-size:14px;
+    color:#9fb0d8;
+    background:#0b0f1a;
+    z-index:5;
+  }
+  #loading.hidden{display:none}
+
+  .controls{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-top:10px;
+  }
   button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
-  .btn{min-height:44px;border:0;border-radius:12px;padding:10px 16px;font-weight:800;background:#252f4b;color:#fff}
+  .btn{
+    min-height:44px;
+    border:0;
+    border-radius:12px;
+    padding:10px 16px;
+    font-weight:800;
+    background:#252f4b;
+    color:#fff;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:transform .1s, background .15s;
+  }
   .btn:active{transform:translateY(1px);opacity:.9}
   .btn-primary{background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff}
-  #lives{font-size:18px;letter-spacing:2px;white-space:nowrap}
-  #timer{font-variant-numeric:tabular-nums;font-weight:800;color:#f59e0b;min-width:52px;text-align:right}
-  #hint{text-align:center;font-size:13px;color:#9fb0d8;margin:10px 0 0}
-  #result{margin-top:14px;border-radius:16px;padding:16px;background:#141b2e;border:1px solid #2b3552}
+  .btn-primary:hover{background:linear-gradient(135deg,#9333ea,#4f46e5)}
+
+  #lives{font-size:20px;letter-spacing:3px;white-space:nowrap}
+  #timer{font-variant-numeric:tabular-nums;font-weight:800;color:#f59e0b;min-width:54px;text-align:right;font-size:16px}
+  #hint{text-align:center;font-size:13px;color:#9fb0d8;margin:8px 0 0}
+  #kbdHelp{
+    text-align:center;
+    font-size:11px;
+    color:#64748b;
+    margin-top:4px;
+  }
+
+  /* Result screen */
+  #result{
+    margin-top:14px;
+    border-radius:18px;
+    padding:18px;
+    background:#141b2e;
+    border:1px solid #2b3552;
+    animation:fadeIn .3s ease-out;
+  }
   #result[hidden]{display:none}
   #resTitle{font-size:24px;font-weight:900;margin:0 0 6px}
-  #resMeta{font-size:14px;color:#d5dcf0;margin:0 0 4px}
-  #resExplain{font-size:13px;color:#9fb0d8;margin:6px 0 12px}
-  .share{width:100%;margin-bottom:16px}
-  .download{background:linear-gradient(135deg,#1d2742,#141b2e);border:1px solid #3a4770;border-radius:16px;padding:16px}
-  .download h2{font-size:19px;margin:0 0 4px;font-weight:900}
-  .download p{font-size:13px;color:#c4cee8;margin:0 0 14px;line-height:1.45}
-  .store{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:50px;border-radius:12px;text-decoration:none;font-weight:800;font-size:15px;margin-top:10px;background:#000;color:#fff;border:1px solid #333}
+  #resMeta{font-size:15px;color:#d5dcf0;margin:0 0 4px}
+  #resExplain{font-size:14px;color:#a5b4fc;margin:8px 0 14px;line-height:1.4}
+  .result-buttons{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+  .share{width:100%}
+
+  .download{
+    background:linear-gradient(135deg,#1d2742,#141b2e);
+    border:1px solid #3a4770;
+    border-radius:16px;
+    padding:16px;
+  }
+  .download h2{font-size:18px;margin:0 0 4px;font-weight:900}
+  .download p{font-size:13px;color:#c4cee8;margin:0 0 12px;line-height:1.45}
+  .store{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    min-height:48px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:800;
+    font-size:14px;
+    margin-top:8px;
+    background:#000;
+    color:#fff;
+    border:1px solid #333;
+    transition:background .2s;
+  }
   .store.play{background:#182132;border-color:#2d3b5c}
+  .store.pwa{background:linear-gradient(135deg,#4c1d95,#312e81);border-color:#6d28d9;cursor:pointer}
   .store small{font-size:10px;font-weight:600;opacity:.75;display:block}
-  #toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#f7f8fc;color:#11182a;padding:10px 18px;border-radius:999px;font-weight:800;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:10;max-width:90vw;text-align:center}
+
+  /* Footer */
+  footer{
+    margin-top:auto;
+    padding-top:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+    font-size:12px;
+    color:#64748b;
+  }
+  footer a{color:#94a3b8;text-decoration:none}
+  footer a:hover{text-decoration:underline;color:#cbd5e1}
+
+  #toast{
+    position:fixed;
+    left:50%;
+    bottom:28px;
+    transform:translate(-50%,20px);
+    background:#f7f8fc;
+    color:#11182a;
+    padding:10px 20px;
+    border-radius:999px;
+    font-weight:800;
+    font-size:13px;
+    opacity:0;
+    pointer-events:none;
+    transition:transform .25s ease, opacity .25s ease;
+    z-index:999;
+    max-width:90vw;
+    text-align:center;
+    box-shadow:0 8px 24px rgba(0,0,0,.4);
+  }
   #toast.show{opacity:1;transform:translate(-50%,0)}
-  @media (max-width:360px){#app{padding:10px 8px}.brand{font-size:18px}}
+
+  @media (max-width:360px){
+    #app{padding:8px 8px calc(16px + env(safe-area-inset-bottom))}
+    .brand{font-size:17px}
+    #lives{font-size:18px;letter-spacing:1px}
+  }
+  @media (min-width:768px){
+    #app{max-width:680px;padding:24px 20px}
+    #videoWrap{max-height:68vh}
+    .brand{font-size:22px}
+  }
 </style>
 </head>
 <body>
 <main id="app">
   <header>
-    <div class="brand">🎬 GAZAPO<span>.</span></div>
-    <div class="pill" id="edition">#000</div>
+    <div class="brand-group">
+      <a class="brand" href="/" aria-label="Gazapo Inicio">🎬 GAZAPO<span>.</span></a>
+      <span class="pill" id="streakPill" title="Tu racha actual de aciertos">🔥 0</span>
+    </div>
+    <div class="header-actions">
+      <span class="pill" id="edition">#000</span>
+      <button class="btn-lang" id="btnLang" type="button" title="Cambiar idioma / Switch language">EN</button>
+    </div>
   </header>
 
+  <!-- PWA Install Banner -->
+  <aside id="pwaBanner" role="region" aria-label="Instalar Gazapo">
+    <div class="pwa-text">
+      <img src="icon-192.png" alt="Gazapo Icon" class="pwa-icon">
+      <span data-i18n="pwaPrompt">Instala Gazapo para jugar cada día al instante</span>
+    </div>
+    <div class="pwa-actions">
+      <button class="btn-pwa-install" id="btnPwaInstall" type="button" data-i18n="pwaInstall">Instalar</button>
+      <button class="btn-pwa-dismiss" id="btnPwaDismiss" type="button" aria-label="Cerrar">✕</button>
+    </div>
+  </aside>
+
   <section id="stage">
-    <div id="videoWrap">
-      <video id="gameVideo" playsinline webkit-playsinline loop muted preload="metadata"></video>
+    <div id="videoWrap" tabindex="0" role="region" aria-label="Vídeo del reto diario">
+      <video id="gameVideo" playsinline webkit-playsinline muted loop preload="auto"></video>
       <div id="marks"></div>
+      <button id="btnAudio" type="button" aria-label="Activar sonido (M)" title="Activar sonido (M)">🔇</button>
       <div id="loading" data-i18n="loading">Cargando el reto de hoy…</div>
     </div>
     <div class="controls">
@@ -81,25 +380,39 @@
       <span id="timer">0.0s</span>
     </div>
     <p id="hint" data-i18n="hint">Toca el vídeo donde esté el fallo · 3 intentos</p>
+    <div id="kbdHelp" data-i18n="kbdHelp">Espacio: Pausa · R: Reiniciar · M: Audio · Flechas: ±1s</div>
   </section>
 
   <section id="result" hidden>
     <h2 id="resTitle"></h2>
     <p id="resMeta"></p>
     <p id="resExplain"></p>
-    <button class="btn btn-primary share" id="btnShare" type="button" data-i18n="share">📤 Compartir resultado</button>
+    <div class="result-buttons">
+      <button class="btn btn-primary share" id="btnShare" type="button" data-i18n="share">📤 Compartir resultado</button>
+    </div>
 
     <div class="download">
       <h2 data-i18n="dlTitle">Guarda tu racha en la app</h2>
       <p data-i18n="dlBody">Juega al archivo de días anteriores, conserva tu racha y compite con tus amigos.</p>
-      <a class="store" id="btnAppStore" href="https://apps.apple.com/es/app/gazapo/id6822689490" target="_blank" rel="noopener">
+      <a class="store" id="btnAppStore" href="https://apps.apple.com/app/gazapo/id6822689490" target="_blank" rel="noopener">
         <span>🍎 <span data-i18n="appStore">Descargar en App Store</span><small>iOS</small></span>
       </a>
       <a class="store play" id="btnPlayStore" href="https://play.google.com/store/apps/details?id=com.gazapo.app" target="_blank" rel="noopener">
         <span>▶️ <span data-i18n="playStore">Disponible en Google Play</span><small>Android</small></span>
       </a>
+      <button class="store pwa" id="btnPwaCta" type="button" style="display:none">
+        <span>💻 <span data-i18n="pwaCta">Instalar como App en este equipo</span><small>PWA</small></span>
+      </button>
     </div>
   </section>
+
+  <footer>
+    <a href="https://jaime312.github.io/gazapo-privacy/" target="_blank" rel="noopener" data-i18n="privacy">Privacidad</a>
+    <span>·</span>
+    <a href="app-ads.txt" target="_blank" rel="noopener">app-ads.txt</a>
+    <span>·</span>
+    <span>© 2026 Gazapo</span>
+  </footer>
 </main>
 <div id="toast" role="status" aria-live="polite"></div>
 
@@ -107,48 +420,110 @@
 (function(){
   "use strict";
 
+  // 1. Textos multilingües (ES / EN)
   var I18N = {
     es: {
-      loading:"Cargando el reto de hoy…", pause:"⏸ Pausa", play:"▶️ Reanudar",
-      hint:"Toca el vídeo donde esté el fallo · 3 intentos",
-      share:"📤 Compartir resultado", copied:"¡Texto copiado!",
-      win:"¡Lo cazaste!", lose:"Se te escapó",
-      hits:"Acertaste en ", tries:" intentos", attempts:" intentos", inTime:" en ", failText:"Agotaste los 3 intentos. ¿Lo ves ahora?",
-      dlTitle:"Guarda tu racha en la app", dlBody:"Juega al archivo de días anteriores, conserva tu racha y compite con tus amigos.",
-      appStore:"Descargar en App Store", playStore:"Disponible en Google Play",
-      noMeta:"Sin pistas disponibles hoy", error:"No se pudo cargar el vídeo. Inténtalo de nuevo."
+      loading: "Cargando el reto de hoy…",
+      pause: "⏸ Pausa",
+      play: "▶️ Reanudar",
+      hint: "Toca el vídeo donde esté el fallo · 3 intentos",
+      kbdHelp: "Espacio: Pausa · R: Reiniciar · M: Audio · Flechas: ±1s",
+      share: "📤 Compartir resultado",
+      copied: "¡Texto copiado al portapapeles!",
+      win: "¡Lo cazaste!",
+      lose: "Se te escapó",
+      hits: "Acertaste en ",
+      tries: " intentos",
+      attempts: " intentos",
+      inTime: " en ",
+      failText: "Agotaste los 3 intentos. ¿Lo ves ahora?",
+      dlTitle: "Guarda tu racha en la app",
+      dlBody: "Juega al archivo de días anteriores, conserva tu racha y compite con tus amigos.",
+      appStore: "Descargar en App Store",
+      playStore: "Disponible en Google Play",
+      pwaCta: "Instalar como App en este equipo",
+      pwaPrompt: "Instala Gazapo para jugar cada día al instante",
+      pwaInstall: "Instalar",
+      privacy: "Privacidad",
+      iosAddHome: "Para instalar: toca Compartir ⎋ y 'Añadir a pantalla de inicio' ➕",
+      noMeta: "Sin pistas disponibles hoy",
+      error: "No se pudo cargar el vídeo. Inténtalo de nuevo."
     },
     en: {
-      loading:"Loading today's challenge…", pause:"⏸ Pause", play:"▶️ Play",
-      hint:"Tap the video where the glitch is · 3 attempts",
-      share:"📤 Share result", copied:"Text copied!",
-      win:"You caught it!", lose:"It got away",
-      hits:"Found it on try ", tries:"", attempts:" attempts", inTime:" in ", failText:"You used all 3 attempts. Can you see it now?",
-      dlTitle:"Keep your streak in the app", dlBody:"Play the archive of past days, keep your streak and challenge your friends.",
-      appStore:"Download on the App Store", playStore:"Get it on Google Play",
-      noMeta:"No hints available today", error:"Could not load the video. Please try again."
+      loading: "Loading today's challenge…",
+      pause: "⏸ Pause",
+      play: "▶️ Play",
+      hint: "Tap the video where the glitch is · 3 attempts",
+      kbdHelp: "Space: Pause · R: Restart · M: Audio · Arrows: ±1s",
+      share: "📤 Share result",
+      copied: "Text copied to clipboard!",
+      win: "You caught it!",
+      lose: "It got away",
+      hits: "Spotted on attempt ",
+      tries: "",
+      attempts: " attempts",
+      inTime: " in ",
+      failText: "You used all 3 attempts. Can you see it now?",
+      dlTitle: "Keep your streak in the app",
+      dlBody: "Play the archive of past days, keep your streak and challenge your friends.",
+      appStore: "Download on the App Store",
+      playStore: "Get it on Google Play",
+      pwaCta: "Install as App on this device",
+      pwaPrompt: "Install Gazapo to play instantly every day",
+      pwaInstall: "Install",
+      privacy: "Privacy",
+      iosAddHome: "To install: tap Share ⎋ and 'Add to Home Screen' ➕",
+      noMeta: "No hints available today",
+      error: "Could not load the video. Please try again."
     }
   };
 
-  var LANG = /^es([-_]|$)/i.test(navigator.language || (navigator.languages && navigator.languages[0]) || "") ? "es" : "en";
+  // Selector y persistencia de idioma
+  var savedLang = "";
+  try { savedLang = localStorage.getItem("gazapo_web_lang") || ""; } catch(e){}
+  var browserLang = /^es([-_]|$)/i.test(navigator.language || (navigator.languages && navigator.languages[0]) || "") ? "es" : "en";
+  var LANG = savedLang === "es" || savedLang === "en" ? savedLang : browserLang;
   var T = I18N[LANG];
   document.documentElement.lang = LANG;
-  function tr(key){ return T[key] !== undefined ? T[key] : I18N.es[key]; }
+
+  function tr(key){
+    return (T && T[key] !== undefined) ? T[key] : (I18N.es[key] !== undefined ? I18N.es[key] : key);
+  }
+
   function paintI18n(){
     var els = document.querySelectorAll("[data-i18n]");
-    for (var i=0;i<els.length;i++) els[i].textContent = tr(els[i].getAttribute("data-i18n"));
+    for (var i = 0; i < els.length; i++) {
+      var k = els[i].getAttribute("data-i18n");
+      els[i].textContent = tr(k);
+    }
+    var langBtn = document.getElementById("btnLang");
+    if (langBtn) langBtn.textContent = LANG === "es" ? "EN" : "ES";
   }
-  paintI18n();
 
+  var btnLang = document.getElementById("btnLang");
+  if (btnLang) {
+    btnLang.addEventListener("click", function(){
+      LANG = LANG === "es" ? "en" : "es";
+      T = I18N[LANG];
+      document.documentElement.lang = LANG;
+      try { localStorage.setItem("gazapo_web_lang", LANG); } catch(e){}
+      paintI18n();
+      updateAudioButtonText();
+    });
+  }
+
+  // Gateway y Catálogo
   var CF = "https://gazapo-media-gateway.jaime-v92.workers.dev";
   var APP_KEY = "gazapo_app_6ccwbcjiql1l1isk6tngq6vn";
   var CATALOG_URL = CF + "/catalogo.json?k=" + encodeURIComponent(APP_KEY);
 
+  // Elementos DOM
   var video = document.getElementById("gameVideo");
   var wrap = document.getElementById("videoWrap");
   var marks = document.getElementById("marks");
   var loading = document.getElementById("loading");
   var btnPlay = document.getElementById("btnPlay");
+  var btnAudio = document.getElementById("btnAudio");
   var livesEl = document.getElementById("lives");
   var timerEl = document.getElementById("timer");
   var hintEl = document.getElementById("hint");
@@ -158,67 +533,167 @@
   var resExplain = document.getElementById("resExplain");
   var toast = document.getElementById("toast");
   var editionEl = document.getElementById("edition");
+  var streakPill = document.getElementById("streakPill");
+  var pwaBanner = document.getElementById("pwaBanner");
+  var btnPwaInstall = document.getElementById("btnPwaInstall");
+  var btnPwaDismiss = document.getElementById("btnPwaDismiss");
+  var btnPwaCta = document.getElementById("btnPwaCta");
 
-  var current = null, zone = null, attempts = 0, used = 0, finished = false, startedAt = 0, timerId = null;
+  // Estado del juego
+  var current = null;
+  var zone = null;
+  var used = 0;
+  var finished = false;
+  var startedAt = 0;
+  var timerId = null;
 
   function withKey(u){
     if (!u) return u;
     return u + (u.indexOf("?") >= 0 ? "&" : "?") + "k=" + encodeURIComponent(APP_KEY);
   }
+
   function showToast(msg){
-    toast.textContent = msg; toast.classList.add("show");
-    setTimeout(function(){ toast.classList.remove("show"); }, 2200);
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(function(){ toast.classList.remove("show"); }, 2400);
   }
 
-  // Zona del fallo: unión de los polígonos del sidecar (coordenadas normalizadas)
+  // 2. Persistencia de racha
+  function getStreak(){
+    try {
+      var s = parseInt(localStorage.getItem("gazapo_web_streak") || "0", 10);
+      return isNaN(s) ? 0 : s;
+    } catch(e){ return 0; }
+  }
+  function updateStreakBadge(){
+    var s = getStreak();
+    if (streakPill) streakPill.textContent = "🔥 " + s;
+  }
+  function recordWin(){
+    try {
+      var today = new Date().toISOString().slice(0, 10);
+      var lastDate = localStorage.getItem("gazapo_web_last_win") || "";
+      var streak = getStreak();
+      if (lastDate !== today) {
+        var yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+        streak = (lastDate === yesterday) ? streak + 1 : 1;
+        localStorage.setItem("gazapo_web_streak", String(streak));
+        localStorage.setItem("gazapo_web_last_win", today);
+        updateStreakBadge();
+      }
+    } catch(e){}
+  }
+
+  // 3. Audio seguro con gesto de usuario
+  function updateAudioButtonText(){
+    if (!btnAudio) return;
+    if (video.muted) {
+      btnAudio.textContent = "🔇";
+      btnAudio.title = LANG === "es" ? "Activar sonido (M)" : "Unmute audio (M)";
+    } else {
+      btnAudio.textContent = "🔊";
+      btnAudio.title = LANG === "es" ? "Silenciar audio (M)" : "Mute audio (M)";
+    }
+  }
+
+  if (btnAudio) {
+    btnAudio.addEventListener("click", function(ev){
+      ev.stopPropagation();
+      video.muted = !video.muted;
+      updateAudioButtonText();
+    });
+  }
+
+  // 4. VideoCoordinateMapper: Mapeo matemático exacto descontando barras de letterboxing
+  function getVideoRenderRect(){
+    var cw = wrap.clientWidth;
+    var ch = wrap.clientHeight;
+    var vw = video.videoWidth || 1080;
+    var vh = video.videoHeight || 1920;
+    var scale = Math.min(cw / vw, ch / vh);
+    var dw = vw * scale;
+    var dh = vh * scale;
+    var ox = (cw - dw) / 2;
+    var oy = (ch - dh) / 2;
+    return {
+      left: ox,
+      top: oy,
+      width: dw,
+      height: dh,
+      scale: scale
+    };
+  }
+
+  function mapClickToVideo(clientX, clientY){
+    var r = wrap.getBoundingClientRect();
+    var clickX = clientX - r.left;
+    var clickY = clientY - r.top;
+    var vr = getVideoRenderRect();
+
+    // Comprobar si el clic cayó dentro del área real del vídeo (descontando barras negras)
+    if (clickX < vr.left || clickX > (vr.left + vr.width) ||
+        clickY < vr.top || clickY > (vr.top + vr.height)) {
+      return null; // Clic en barra negra externa
+    }
+
+    var nx = (clickX - vr.left) / vr.width;
+    var ny = (clickY - vr.top) / vr.height;
+    return { nx: nx, ny: ny, px: clickX, py: clickY };
+  }
+
+  // 5. Zona de acierto
   function buildZone(sidecar){
     var map = sidecar && sidecar.zona && sidecar.zona.map;
     if (!map) return null;
     var frames = Object.keys(map).map(Number).sort(function(a,b){ return a-b; });
     if (!frames.length) return null;
-    var minX=1, maxX=0, minY=1, maxY=0;
+    var minX = 1, maxX = 0, minY = 1, maxY = 0;
     frames.forEach(function(f){
       (map[String(f)] || []).forEach(function(p){
         if (!p || p.length < 2) return;
         var x = Number(p[0]), y = Number(p[1]);
         if (!isFinite(x) || !isFinite(y)) return;
-        if (x<minX) minX=x; if (x>maxX) maxX=x;
-        if (y<minY) minY=y; if (y>maxY) maxY=y;
+        if (x < minX) minX = x; if (x > maxX) maxX = x;
+        if (y < minY) minY = y; if (y > maxY) maxY = y;
       });
     });
     if (maxX <= minX || maxY <= minY) return null;
     var fps = Number((sidecar.zona && sidecar.zona.fps) || 30) || 30;
     return {
-      cx:(minX+maxX)/2, cy:(minY+maxY)/2,
-      r:Math.max(0.075, Math.max((maxX-minX)/2, (maxY-minY)/2) * 1.3),
-      t0:frames[0]/fps, t1:frames[frames.length-1]/fps,
+      cx: (minX + maxX) / 2,
+      cy: (minY + maxY) / 2,
+      r: Math.max(0.075, Math.max((maxX - minX) / 2, (maxY - minY) / 2) * 1.3),
+      t0: frames[0] / fps,
+      t1: frames[frames.length - 1] / fps,
       explain: sidecar.explicacion || sidecar.gazapoCorto || ""
     };
   }
 
   function pickVideo(videos){
-    var today = new Date().toISOString().slice(0,10);
+    var today = new Date().toISOString().slice(0, 10);
     var chosen = null;
-    for (var i=0;i<videos.length;i++){
+    for (var i = 0; i < videos.length; i++){
       if (videos[i].fecha === today && videos[i].activo !== false){ chosen = videos[i]; break; }
     }
     if (!chosen){
       var past = videos.filter(function(v){ return v.fecha <= today && v.activo !== false; });
-      chosen = past.length ? past[past.length-1] : (videos[0] || null);
+      chosen = past.length ? past[past.length - 1] : (videos[0] || null);
     }
     return chosen;
   }
 
   function setup(v, index){
     current = v;
-    editionEl.textContent = "#" + String(index+1).padStart(3,"0");
+    editionEl.textContent = "#" + String(index + 1).padStart(3, "0");
     video.src = withKey(v.src || (CF + "/" + v.id + ".mp4"));
     if (v.poster) video.poster = withKey(v.poster);
+    video.muted = true;
+    updateAudioButtonText();
     video.load();
     var p = video.play();
     if (p && p.catch) p.catch(function(){});
     if (v.meta_path){
-      fetch(withKey(v.meta_path), {cache:"no-store"})
+      fetch(withKey(v.meta_path), {cache: "no-store"})
         .then(function(r){ return r.ok ? r.json() : null; })
         .then(function(s){ zone = buildZone(s); })
         .catch(function(){ zone = null; });
@@ -226,8 +701,8 @@
   }
 
   function load(){
-    fetch(CATALOG_URL, {cache:"no-store"})
-      .then(function(r){ if(!r.ok) throw new Error("catalog"); return r.json(); })
+    fetch(CATALOG_URL, {cache: "no-store"})
+      .then(function(r){ if (!r.ok) throw new Error("catalog"); return r.json(); })
       .then(function(cat){
         var videos = (cat && cat.videos) || [];
         if (!videos.length) throw new Error("empty");
@@ -243,26 +718,27 @@
   function startTimer(){
     if (!startedAt) startedAt = Date.now();
     if (!timerId) timerId = setInterval(function(){
-      if (!finished) timerEl.textContent = ((Date.now()-startedAt)/1000).toFixed(1) + "s";
+      if (!finished) timerEl.textContent = ((Date.now() - startedAt) / 1000).toFixed(1) + "s";
     }, 100);
   }
+
   function paintLives(){
     var s = "";
-    for (var i=0;i<3;i++) s += i < (3-used) ? "❤️" : "🖤";
+    for (var i = 0; i < 3; i++) s += i < (3 - used) ? "❤️" : "🖤";
     livesEl.textContent = s;
   }
 
-  function isHit(nx,ny,t){
+  function isHit(nx, ny, t){
     if (!zone) return true;
-    var dx=nx-zone.cx, dy=ny-zone.cy;
-    var inside = Math.sqrt(dx*dx+dy*dy) <= zone.r;
-    var inTime = !isFinite(zone.t0) || (t >= zone.t0-3 && t <= zone.t1+3);
+    var dx = nx - zone.cx, dy = ny - zone.cy;
+    var inside = Math.sqrt(dx * dx + dy * dy) <= zone.r;
+    var inTime = !isFinite(zone.t0) || (t >= zone.t0 - 3 && t <= zone.t1 + 3);
     return inside && inTime;
   }
 
   function shareText(win){
     var n = used || 1;
-    var sec = ((Date.now()-startedAt)/1000).toFixed(1).replace(".", LANG==="es"?",":".");
+    var sec = ((Date.now() - startedAt) / 1000).toFixed(1).replace(".", LANG === "es" ? "," : ".");
     var num = editionEl.textContent;
     if (LANG === "es"){
       return win
@@ -270,7 +746,7 @@
         : "🎬 Gazapo " + num + "\n❌ Hoy la IA me ha engañado.\n¿Eres capaz de ver el fallo? 👇\nhttps://jaime312.github.io";
     }
     return win
-      ? "🎬 Gazapo " + num + "\n✅ Spotted on try #" + n + " in " + sec + "s\nCan you beat my time? 👇\nhttps://jaime312.github.io"
+      ? "🎬 Gazapo " + num + "\n✅ Spotted on attempt #" + n + " in " + sec + "s\nCan you beat my time? 👇\nhttps://jaime312.github.io"
       : "🎬 Gazapo " + num + "\n❌ The AI fooled me today.\nCan you spot the glitch? 👇\nhttps://jaime312.github.io";
   }
 
@@ -281,56 +757,84 @@
     btnPlay.textContent = tr("play");
     if (timerId){ clearInterval(timerId); timerId = null; }
     resTitle.textContent = win ? tr("win") : tr("lose");
-    var sec = ((Date.now()-startedAt)/1000).toFixed(1).replace(".", LANG==="es"?",":".");
+    var sec = ((Date.now() - startedAt) / 1000).toFixed(1).replace(".", LANG === "es" ? "," : ".");
     var triesWord = tr("tries");
     if (LANG === "es" && used === 1) triesWord = " intento";
     resMeta.textContent = win
       ? tr("hits") + used + triesWord + tr("inTime") + sec + "s"
       : tr("failText");
     resExplain.textContent = (zone && zone.explain) ? "👀 " + zone.explain : "";
+    if (win) recordWin();
     result.hidden = false;
-    result.scrollIntoView({behavior:"smooth", block:"nearest"});
+    result.scrollIntoView({behavior: "smooth", block: "nearest"});
   }
 
   function copyText(text){
-    if (navigator.clipboard && navigator.clipboard.writeText){
-      return navigator.clipboard.writeText(text).then(function(){ showToast(tr("copied")); })
-        .catch(function(){ fallbackCopy(text); });
+    if (navigator.share) {
+      navigator.share({
+        title: "Gazapo",
+        text: text,
+        url: "https://jaime312.github.io"
+      }).catch(function(){ doClipboardCopy(text); });
+      return;
     }
-    fallbackCopy(text);
+    doClipboardCopy(text);
   }
+
+  function doClipboardCopy(text){
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        showToast(tr("copied"));
+      }).catch(function(){ fallbackCopy(text); });
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
   function fallbackCopy(text){
     var ta = document.createElement("textarea");
-    ta.value = text; ta.setAttribute("readonly","");
-    ta.style.position="fixed"; ta.style.opacity="0";
-    document.body.appendChild(ta); ta.select();
-    try { document.execCommand("copy"); showToast(tr("copied")); } catch(e){}
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy");
+      showToast(tr("copied"));
+    } catch(e){}
     document.body.removeChild(ta);
   }
 
+  // Interacción táctil y ratón con VideoCoordinateMapper
   wrap.addEventListener("click", function(ev){
     if (finished || !current || !video.videoWidth) return;
     startTimer();
-    var r = wrap.getBoundingClientRect();
-    var scale = Math.min(r.width/video.videoWidth, r.height/video.videoHeight);
-    var dispW = video.videoWidth*scale, dispH = video.videoHeight*scale;
-    var offX = (r.width-dispW)/2, offY = (r.height-dispH)/2;
-    var nx = (ev.clientX - r.left - offX)/dispW;
-    var ny = (ev.clientY - r.top - offY)/dispH;
-    var hit = (nx>=0 && nx<=1 && ny>=0 && ny<=1) ? isHit(nx,ny,video.currentTime) : false;
+    var mapped = mapClickToVideo(ev.clientX, ev.clientY);
+    if (!mapped) return; // Fuera del área de vídeo
+
+    var hit = isHit(mapped.nx, mapped.ny, video.currentTime);
     var dot = document.createElement("div");
     dot.className = "mark" + (hit ? " hit" : "");
-    dot.style.left = (ev.clientX - r.left) + "px";
-    dot.style.top = (ev.clientY - r.top) + "px";
+    dot.style.left = mapped.px + "px";
+    dot.style.top = mapped.py + "px";
     marks.appendChild(dot);
     used++;
     paintLives();
-    if (hit) finish(true);
-    else if (used >= 3) finish(false);
-    else hintEl.textContent = LANG === "es" ? "¡Casi! Te quedan " + (3-used) + " intentos" : "Close! " + (3-used) + " attempts left";
+
+    if (hit) {
+      finish(true);
+    } else if (used >= 3) {
+      finish(false);
+    } else {
+      hintEl.textContent = LANG === "es"
+        ? "¡Casi! Te quedan " + (3 - used) + " intentos"
+        : "Close! " + (3 - used) + " attempts left";
+    }
   });
 
-  btnPlay.addEventListener("click", function(){
+  // Play / Pausa
+  function togglePlay(){
     if (video.paused){
       var p = video.play();
       if (p && p.catch) p.catch(function(){});
@@ -340,18 +844,130 @@
       video.pause();
       btnPlay.textContent = tr("play");
     }
-  });
+  }
+
+  btnPlay.addEventListener("click", togglePlay);
   video.addEventListener("play", function(){ btnPlay.textContent = tr("pause"); });
   video.addEventListener("pause", function(){ btnPlay.textContent = tr("play"); });
 
-  document.getElementById("btnShare").addEventListener("click", function(){ copyText(shareText(used>0 && !!document.querySelector(".mark.hit"))); });
+  // Botón Compartir
+  document.getElementById("btnShare").addEventListener("click", function(){
+    copyText(shareText(used > 0 && !!document.querySelector(".mark.hit")));
+  });
 
+  // 6. Controles de Teclado Universales
+  window.addEventListener("keydown", function(ev){
+    var target = ev.target;
+    var tag = target ? target.tagName : "";
+    if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+    if (ev.code === "Space" || ev.key === " ") {
+      ev.preventDefault();
+      togglePlay();
+    } else if (ev.code === "KeyR" || ev.key === "r" || ev.key === "R") {
+      ev.preventDefault();
+      video.currentTime = 0;
+      var p = video.play();
+      if (p && p.catch) p.catch(function(){});
+    } else if (ev.code === "KeyM" || ev.key === "m" || ev.key === "M") {
+      ev.preventDefault();
+      video.muted = !video.muted;
+      updateAudioButtonText();
+    } else if (ev.code === "ArrowLeft") {
+      ev.preventDefault();
+      video.currentTime = Math.max(0, video.currentTime - 1);
+    } else if (ev.code === "ArrowRight") {
+      ev.preventDefault();
+      video.currentTime = Math.min((video.duration || 999), video.currentTime + 1);
+    } else if (ev.code === "Escape") {
+      if (pwaBanner && pwaBanner.classList.contains("show")) {
+        pwaBanner.classList.remove("show");
+      }
+    }
+  });
+
+  // 7. Registro de Service Worker PWA
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function(){
+      navigator.serviceWorker.register("sw.js").then(function(reg){
+        // Si hay una nueva versión disponible, activarla
+        reg.addEventListener("updatefound", function(){
+          var newWorker = reg.installing;
+          if (newWorker) {
+            newWorker.addEventListener("statechange", function(){
+              if (newWorker.state === "activated" && navigator.serviceWorker.controller) {
+                console.log("[PWA] Nueva versión de Gazapo disponible");
+              }
+            });
+          }
+        });
+      }).catch(function(err){
+        console.warn("[PWA] SW no registrado:", err);
+      });
+    });
+  }
+
+  // 8. Instalación Inteligente PWA (beforeinstallprompt + Safari iOS)
+  var deferredPrompt = null;
+  var isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+
+  window.addEventListener("beforeinstallprompt", function(e){
+    e.preventDefault();
+    deferredPrompt = e;
+    var dismissed = false;
+    try { dismissed = localStorage.getItem("gazapo_pwa_dismissed") === "1"; } catch(err){}
+    if (!dismissed && !isStandalone && pwaBanner) {
+      pwaBanner.classList.add("show");
+    }
+    if (btnPwaCta) {
+      btnPwaCta.style.display = "flex";
+    }
+  });
+
+  function triggerPwaInstall(){
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(choiceResult){
+        if (choiceResult.outcome === "accepted") {
+          showToast(LANG === "es" ? "¡Gracias por instalar Gazapo!" : "Thanks for installing Gazapo!");
+        }
+        deferredPrompt = null;
+        if (pwaBanner) pwaBanner.classList.remove("show");
+        if (btnPwaCta) btnPwaCta.style.display = "none";
+      });
+    } else {
+      // Fallback para iOS Safari o navegadores sin prompt directo
+      var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || "") || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      if (isIOS) {
+        showToast(tr("iosAddHome"));
+      } else {
+        showToast(LANG === "es" ? "Usa el menú de tu navegador para añadir a inicio" : "Use your browser menu to install this app");
+      }
+    }
+  }
+
+  if (btnPwaInstall) {
+    btnPwaInstall.addEventListener("click", triggerPwaInstall);
+  }
+  if (btnPwaCta) {
+    btnPwaCta.addEventListener("click", triggerPwaInstall);
+  }
+  if (btnPwaDismiss) {
+    btnPwaDismiss.addEventListener("click", function(){
+      if (pwaBanner) pwaBanner.classList.remove("show");
+      try { localStorage.setItem("gazapo_pwa_dismissed", "1"); } catch(e){}
+    });
+  }
+
+  // Inicialización
+  paintI18n();
   paintLives();
+  updateStreakBadge();
   load();
 })();
 </script>
 <script>
-/* Enlace inteligente a tiendas: móvil -> solo su tienda; escritorio -> ambas. */
+/* Enrutamiento inteligente a tiendas según plataforma */
 (function(){
   try{
     var ua = navigator.userAgent || "";
@@ -359,9 +975,21 @@
     var android = /Android/i.test(ua);
     var app = document.getElementById("btnAppStore");
     var play = document.getElementById("btnPlayStore");
-    if(ios && app && play){ play.style.display = "none"; app.style.display = "flex"; }
-    else if(android && app && play){ app.style.display = "none"; play.style.display = "flex"; }
-    else if(app && play){ app.style.display = "flex"; play.style.display = "flex"; }
+    var pwa = document.getElementById("btnPwaCta");
+
+    if (ios && app && play){
+      play.style.display = "none";
+      app.style.display = "flex";
+    } else if (android && app && play){
+      app.style.display = "none";
+      play.style.display = "flex";
+    } else if (app && play){
+      app.style.display = "flex";
+      play.style.display = "flex";
+      if (pwa && !window.matchMedia("(display-mode: standalone)").matches) {
+        pwa.style.display = "flex";
+      }
+    }
   }catch(e){}
 })();
 </script>
